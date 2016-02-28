@@ -24,7 +24,8 @@ class Puzzle:
         while(position < self._length**2-2 and is_correct):
             actual = self._board[position//self._length][position%self._length]
             position += 1
-            is_correct = False if self._board[position//self._length][position%self._length] == None or actual == None else actual < self._board[position//self._length][position%self._length]
+            is_correct = bool(self._board[position//self._length][position%self._length]) \
+                    and bool(actual) and actual < self._board[position//self._length][position%self._length]
         
         return is_correct
     
