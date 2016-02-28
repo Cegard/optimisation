@@ -18,18 +18,13 @@ class Puzzle:
     
     
     def is_ordered(self, ):
-        previous = self._board[0]
-        row = 0
+        position = 0
         is_correct = True
         
-        while(row < self._length and is_correct):
-            col = 0
-            
-            while(col < self._length and is_correct):
-                is_correct = True if previous < self._board[row][col] else False
-                col += 1
-            
-            row += 1
+        while(position < self._length**2-2 and is_correct):
+            actual = self._board[position//self._length][position%self._length]
+            position += 1
+            is_correct = False if self._board[position//self._length][position%self._length] == None or actual == None else actual < self._board[position//self._length][position%self._length]
         
         return is_correct
     
