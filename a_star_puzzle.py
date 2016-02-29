@@ -19,7 +19,7 @@ def disorder_puzzle(movements, puzzle):
             can_move = copied_puzzle.possibilities[direction%4]
         
         copied_puzzle.swap(directions[direction%4])
-    
+    print(copied_puzzle)
     return copied_puzzle
 
 

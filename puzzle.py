@@ -62,15 +62,18 @@ class Puzzle:
             (self.__blank_box[1] > 0), (self.__blank_box[1] < self.__length-1)]
     
     
+    def __eq__(self, other):
+        return self.__board == other.board
+    
+    
     def __str__(self, ):
         puzzle = ''
         max_digits = floor(log10(self.__length**2))+1
         
         for i in range(self.__length**2):
-            digits = (floor(log10(self.__get_box(i))) or 1) + 1
-            puzzle += ' ' + ' ' * (max_digits - digits) \
+            puzzle += ' ' + ' ' * (max_digits-floor(log10(self.__get_box(i) or 1)+1)) \
                     + str(self.__get_box(i) or 'X') \
-                    + ('\n' if i%self.__length == self.__length-1 else '') 
+                    + ('\n' if i%self.length == self.length-1 else '') 
         
         return puzzle
     

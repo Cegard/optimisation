@@ -63,6 +63,10 @@ class Graph(object):
             """
             
             self.parent = parent
+        
+        
+        def __eq__(self, other):
+            return self.info == other.info
     
     
     class __Edge(object):
