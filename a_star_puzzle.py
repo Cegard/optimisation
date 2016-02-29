@@ -8,18 +8,24 @@ from puzzle import Puzzle
 
 def disorder_puzzle(movements, puzzle):
     directions = {0: 'up', 1: 'down', 2: 'left', 3: 'right'}
+    opposites = {'up': 1, 'down': 0, 'left': 3, 'right': 2}
     copied_puzzle = copy(puzzle)
+    
+    def get_availability(key):
+        return copied_puzzle.possibilities[key] \
+                and copied_puzzle.previous_move != directions[opposites[directions[key]]]
+    
     
     for i in range(movements):
         direction = rand(0, 3)
-        can_move = copied_puzzle.possibilities[direction]
+        can_move = get_availability(direction)
         
         while(not can_move):
             direction += 1
-            can_move = copied_puzzle.possibilities[direction%4]
+            can_move = get_availability(direction%4)
         
         copied_puzzle.swap(directions[direction%4])
-    print(copied_puzzle)
+    
     return copied_puzzle
 
 
@@ -32,6 +38,7 @@ for key in puzzles:
     for i in range(30):
         puzzles[key].append(disorder_puzzle(key, puzzle))
 
+disorder_puzzle(25, puzzle)
 ids_puzzles = copy(puzzles)
 h1_puzzles = copy(puzzles)
 h2_puzzles = copy(puzzles)

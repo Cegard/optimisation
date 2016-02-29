@@ -26,6 +26,7 @@ class Puzzle:
         self.__blank_box = (length-1, length-1)
         self.__board = [[i*length+j+1 for j in range(length)] for i in range(length)]
         self.__board[length-1][length-1] = None
+        self.__previous_move = ''
     
     
     def is_ordered(self, ):
@@ -55,11 +56,21 @@ class Puzzle:
         self.__board[new_row][new_col] = None
         self.__blank_box = (new_row, new_col)
         self.__set_possibilities()
+        self.__previous_move = direction
     
     
     def __set_possibilities(self, ):
         self.__possibilities = [(self.__blank_box[0] > 0), (self.__blank_box[0] < self.__length-1),
             (self.__blank_box[1] > 0), (self.__blank_box[1] < self.__length-1)]
+    
+    
+    def __get_box(self, position):
+        """
+        Gets the item at the exact coordinate in the board
+        :param position: An integer representation of the position.
+        :returns: The item at the coordinate ((position/length), (position%length))
+        """
+        return self.__board[position//self.__length][position%self.__length]
     
     
     def __eq__(self, other):
@@ -78,13 +89,9 @@ class Puzzle:
         return puzzle
     
     
-    def __get_box(self, position):
-        """
-        Gets the item at the exact coordinate in the board
-        :param position: An integer representation of the position.
-        :returns: The item at the coordinate ((position/length), (position%length))
-        """
-        return self.__board[position//self.__length][position%self.__length]
+    @property
+    def previous_move(self, ):
+        return self.__previous_move
     
     
     @property
