@@ -12,18 +12,18 @@ def disorder_puzzle(movements, puzzle):
     
     for i in range(movements):
         direction = rand(0, 3)
-        can_move = copied_puzzle._movements[direction]
+        can_move = copied_puzzle.possibilities[direction]
         
         while(not can_move):
             direction += 1
-            can_move = copied_puzzle._movements[direction%4]
+            can_move = copied_puzzle.possibilities[direction%4]
         
         copied_puzzle.swap(directions[direction%4])
-    print(copied_puzzle)
+    
     return copied_puzzle
 
 
-puzzle_length = 1
+puzzle_length = 4
 puzzle = Puzzle(puzzle_length)
 puzzles = {10: [], 15: [], 20: [], 25: []}
 
