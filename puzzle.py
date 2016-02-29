@@ -21,18 +21,18 @@ class Puzzle:
                 print('something went wrong!')
                 raise
         
-        self.length = length
-        self.possibilities = [True, False, True, False] # up, down, left, right
-        self.blank_box = (length-1, length-1)
-        self.board = [[i*length+j+1 for j in range(length)] for i in range(length)]
-        self.board[length-1][length-1] = None
+        self.__length = length
+        self.__possibilities = [True, False, True, False] # up, down, left, right
+        self.__blank_box = (length-1, length-1)
+        self.__board = [[i*length+j+1 for j in range(length)] for i in range(length)]
+        self.__board[length-1][length-1] = None
     
     
     def is_ordered(self, ):
         position = 0
         is_correct = True
         
-        while(position < self.length**2-2 and is_correct):
+        while(position < self.__length**2-2 and is_correct):
             actual = self.__get_box(position)
             position += 1
             next_one = self.__get_box(position)
@@ -48,28 +48,29 @@ class Puzzle:
         one of up, down, left or right
         """
         directions = {'up': (-1, 0), 'down': (1, 0), 'left': (0, -1), 'right': (0, 1),}
-        new_row = self.blank_box[0] + directions[direction][0]
-        new_col = self.blank_box[1] + directions[direction][1]
-        self.board[self.blank_box[0]][self.blank_box[1]] = \
-                self.__get_box((new_row*self.length)+new_col)
-        self.board[new_row][new_col] = None
-        self.blank_box = (new_row, new_col)
+        new_row = self.__blank_box[0] + directions[direction][0]
+        new_col = self.__blank_box[1] + directions[direction][1]
+        self.__board[self.__blank_box[0]][self.__blank_box[1]] = \
+                self.__get_box((new_row*self.__length)+new_col)
+        self.__board[new_row][new_col] = None
+        self.__blank_box = (new_row, new_col)
         self.__set_possibilities()
     
     
     def __set_possibilities(self, ):
-        self.possibilities = [(self.blank_box[0] > 0), (self.blank_box[0] < self.length-1),
-            (self.blank_box[1] > 0), (self.blank_box[1] < self.length-1)]
+        self.__possibilities = [(self.__blank_box[0] > 0), (self.__blank_box[0] < self.__length-1),
+            (self.__blank_box[1] > 0), (self.__blank_box[1] < self.__length-1)]
     
     
     def __str__(self, ):
         puzzle = ''
-        max_digits = floor(log10(self.length**2))+1
+        max_digits = floor(log10(self.__length**2))+1
         
-        for i in range(self.length**2):
-            puzzle += ' ' + ' ' * (max_digits-floor(log10(self.__get_box(i) or 1)+1)) \
-                    + str(self.__get_box(i) or 'X') + \
-                    ('\n' if i%self.length == self.length-1 else '') 
+        for i in range(self.__length**2):
+            digits = (floor(log10(self.__get_box(i))) or 1) + 1
+            puzzle += ' ' + ' ' * (max_digits - digits) \
+                    + str(self.__get_box(i) or 'X') \
+                    + ('\n' if i%self.__length == self.__length-1 else '') 
         
         return puzzle
     
@@ -80,4 +81,24 @@ class Puzzle:
         :param position: An integer representation of the position.
         :returns: The item at the coordinate ((position/length), (position%length))
         """
-        return self.board[position//self.length][position%self.length]
+        return self.__board[position//self.__length][position%self.__length]
+    
+    
+    @property
+    def length(self, ):
+        return self.__length
+    
+    
+    @property
+    def possibilities(self, ):
+        return self.__possibilities
+    
+    
+    @property
+    def blank_box(self, ):
+        return self.__blank_box
+    
+    
+    @property
+    def board(self, ):
+        return self.__board
