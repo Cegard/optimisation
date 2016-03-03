@@ -23,18 +23,12 @@ class Graph(object):
     
     
     def remove_node(self, node):
-        
-        
-        def __remove(node, edges):
-            for edge in edges:
-                ending = edge[0]
-                cost = edge[1]
-                ending.in_edges -= set((node, cost))
-                ending.neighbors -= set((node, cost))
-
-        
-        __remove(node, node.in_edges)
-        __remove(node, node.neighbors)
+        """
+        Deletes a node from the graph and all edges where it appears
+        :param node: The node to remove 
+        """
+        self.__nodes.remove(node)
+        del(node)    
     
     
     def get_nodes(self, node_info):
@@ -44,7 +38,7 @@ class Graph(object):
         :returns: A list containing all the nodes with the given info 
         """
         
-        return [x for node in self.__nodes if node.info == node_info]
+        return [x for prospect_node in self.__nodes if prospect_node.info == node_info]
     
     
     @property
