@@ -98,15 +98,15 @@ class Graph(object):
             
             
             def __remove_edge(edges, edge):
-                edges -= set(edge)
+                edges -= edge
             
             
             for edge in self.__in_edges.union(self.__out_edges):
                 secondary_node = in_edge[0]
                 cost = edge[1]
-                edge_to_remove = (self, cost)
+                edge_to_remove = {(self, cost)}
                 __remove_edge(secondary_node.__out_edges, edge_to_remove)
-                __remoce_edge(secondary_node.__in_edges, edge_to_remove)
+                __remove_edge(secondary_node.__in_edges, edge_to_remove)
         
         
         def __eq__(self, other):
