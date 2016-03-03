@@ -61,11 +61,11 @@ class Graph(object):
             :param info: the value to be stored within  the node
             """
             self.info = info
-            self.neighbors = set()
+            self.__in_edges = set()
+            self.__out_edges = set()
             self.parent = None
             self.color = 'white'
             self.cost = 0
-            self.in_edges = set()
         
         
         def add_neighbor(self, neighbor, edge_cost = 0, directed = False):
@@ -80,13 +80,33 @@ class Graph(object):
             """
             
             def __set_neighbor_relationship(starting_node, ending_node, cost):
-                ending_node.in_edges.add((starting_node, cost))
-                starting_node.neighbors.add(ending_node, cost)
+                starting_node.__out_edges.add(ending_node, cost)
+                ending_node.__in_edges.add(starting_node, cost)
             
             
             __set_neighbor_relationship(self, neighbor, edge_cost)
             
             if not directed: __set_neighbor_relationship(neighbor, self, edge_cost)
+        
+        
+        @property
+        def neighbors(self, ):
+            return deepcopy(self.__out_edges)
+        
+        
+        def __del__(self, ):
+            
+            
+            def __remove_edge(edges, edge):
+                edges -= set(edge)
+            
+            
+            for edge in self.__in_edges.union(self.__out_edges):
+                secondary_node = in_edge[0]
+                cost = edge[1]
+                edge_to_remove = (self, cost)
+                __remove_edge(secondary_node.__out_edges, edge_to_remove)
+                __remoce_edge(secondary_node.__in_edges, edge_to_remove)
         
         
         def __eq__(self, other):
@@ -95,5 +115,10 @@ class Graph(object):
             also if the edges that end in the self node are equal to the ones
             that end in the other node
             """
+            
+            def __get_all_edges(node):
+                return node.__in_edges.union(node.__out_edges)
+            
+            
             return self.info == other.info \
-                    and set(self.in_edges) == set(other.in_edges)
+                    and __get_all_edges(self) == __get_all_edges(other)
