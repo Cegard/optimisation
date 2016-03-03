@@ -1,5 +1,5 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from copy import deepcopy
 from math import floor, log10
 
 
@@ -22,24 +22,17 @@ class Puzzle:
                 raise
         
         self.__length = length
-        self.__possibilities = [True, False, True, False] # up, down, left, right
+        self.__possibilities = (True, False, True, False) # up, down, left, right
         self.__blank_box = (length-1, length-1)
         self.__board = [[i*length+j+1 for j in range(length)] for i in range(length)]
         self.__board[length-1][length-1] = None
+        self.__sorted = deepcopy(self.__board)
         self.__previous_move = ''
+        
     
     
     def is_ordered(self, ):
-        position = 0
-        is_correct = True
-        
-        while(position < self.__length**2-2 and is_correct):
-            actual = self.__get_box(position)
-            position += 1
-            next_one = self.__get_box(position)
-            is_correct = bool(next_one and actual and actual < next_one)
-        
-        return is_correct
+        return self.__board == self.__sorted
     
     
     def swap(self, direction):
@@ -51,8 +44,9 @@ class Puzzle:
         directions = {'up': (-1, 0), 'down': (1, 0), 'left': (0, -1), 'right': (0, 1),}
         new_row = self.__blank_box[0] + directions[direction][0]
         new_col = self.__blank_box[1] + directions[direction][1]
-        self.__board[self.__blank_box[0]][self.__blank_box[1]] = \
-                self.__get_box((new_row*self.__length)+new_col)
+        new_position = self.__get_box((new_row*self.__length)+new_col)
+        self.__board[self.__blank_box[0]][self.__blank_box[1]] \
+                = new_position
         self.__board[new_row][new_col] = None
         self.__blank_box = (new_row, new_col)
         self.__set_possibilities()
@@ -60,8 +54,8 @@ class Puzzle:
     
     
     def __set_possibilities(self, ):
-        self.__possibilities = [(self.__blank_box[0] > 0), (self.__blank_box[0] < self.__length-1),
-            (self.__blank_box[1] > 0), (self.__blank_box[1] < self.__length-1)]
+        self.__possibilities = ((self.__blank_box[0] > 0), (self.__blank_box[0] < self.__length-1),
+            (self.__blank_box[1] > 0), (self.__blank_box[1] < self.__length-1))
     
     
     def __get_box(self, position):
@@ -80,11 +74,14 @@ class Puzzle:
     def __str__(self, ):
         puzzle = ''
         max_digits = floor(log10(self.__length**2))+1
+        last_col = self.__length-1
         
         for i in range(self.__length**2):
-            puzzle += ' ' + ' ' * (max_digits-floor(log10(self.__get_box(i) or 1)+1)) \
+            digits = floor(log10(self.__get_box(i) or 1)+1)
+            actual_col = i%self.__length
+            puzzle += ' ' + ' ' * (max_digits-digits) \
                     + str(self.__get_box(i) or 'X') \
-                    + ('\n' if i%self.length == self.length-1 else '') 
+                    + ('\n' if actual_col == last_col else '') 
         
         return puzzle
     
@@ -111,4 +108,4 @@ class Puzzle:
     
     @property
     def board(self, ):
-        return self.__board
+        return deepcopy(self.__board)

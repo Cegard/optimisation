@@ -1,6 +1,4 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from random import randint as rand
 from copy import deepcopy as copy
 from puzzle import Puzzle
@@ -10,6 +8,7 @@ def disorder_puzzle(movements, puzzle):
     directions = {0: 'up', 1: 'down', 2: 'left', 3: 'right'}
     opposites = {0: 1, 1: 0, 2: 3, 3: 2}
     copied_puzzle = copy(puzzle)
+    
     
     def get_availability(key):
         return copied_puzzle.possibilities[key] \

@@ -1,5 +1,5 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from copy import deepcopy
 
 
 class Graph(object):
@@ -8,9 +8,9 @@ class Graph(object):
     def __init__(self, ):
         """
         Creates a new empty graph
+        (a graph is a list of nodes that might have edges between them)
         """
-        self.nodes = []
-        self.edges = []
+        self.__nodes = []
     
     
     def add_node(self, content):
@@ -19,18 +19,37 @@ class Graph(object):
         to the graph.
         :param content: the info to be stroed within the node
         """
-        self.nodes.append(self.__Node(content))
+        self.__nodes.append(self.__Node(content))
     
     
-    def add_edge(self, node1, node2, cost = 0, directed = False):
+    def remove_node(self, node):
+        
+        
+        def __remove(node, edges):
+            for edge in edges:
+                ending = edge[0]
+                cost = edge[1]
+                ending.in_edges -= set((node, cost))
+                ending.neighbors -= set((node, cost))
+
+        
+        __remove(node, node.in_edges)
+        __remove(node, node.neighbors)
+    
+    
+    def get_nodes(self, node_info):
         """
-        Creates an edge between two nodes (not necesarilly different)
-        :param node1: the node object contenting
-        :param node2: the node object to be added
-        :param cost: integer, the cost of the edge, 0 by default
-        :param directed: boolean saying if the edge has a direction
+        Finds all the nodes with the given info in the graph.
+        :param node_info: The info of the node..
+        :returns: A list containing all the nodes with the given info 
         """
-        self.edges.append[self.__Edge(node1, node2, cost, directed)]
+        
+        return [x for node in self.__nodes if node.info == node_info]
+    
+    
+    @property
+    def nodes(self, ):
+        return deepcopy(self.__nodes)
     
 
     class __Node:
@@ -42,48 +61,39 @@ class Graph(object):
             :param info: the value to be stored within  the node
             """
             self.info = info
-            self.neighbors = []
+            self.neighbors = set()
             self.parent = None
             self.color = 'white'
             self.cost = 0
+            self.in_edges = set()
         
         
-        def add_neighbor(self, neighbor):
+        def add_neighbor(self, neighbor, edge_cost = 0, directed = False):
             """
-            adds a child to the node
-            :param neighbor: a Node object to be added
-            """
-            if neighbor not in self.neighbors: self.neighbors.append(neighbor)
-        
-        
-        def set_parent(self, parent):
-            """
-            sets the parent of the self node
-            :param parent: the parent node object
+            Adds a node as a neighbor by creating an edge between
+            the self node and the neighbor node; an edge is a
+            tuple of the form (neighbor, cost)
+            :param neighbor: A node object to be added.
+            :param edge_cost: The cost of the edge to be created.
+            :param directed: If directed it'll create only an edge coming from
+                the self node to the neighbor.
             """
             
-            self.parent = parent
+            def __set_neighbor_relationship(starting_node, ending_node, cost):
+                ending_node.in_edges.add((starting_node, cost))
+                starting_node.neighbors.add(ending_node, cost)
+            
+            
+            __set_neighbor_relationship(self, neighbor, edge_cost)
+            
+            if not directed: __set_neighbor_relationship(neighbor, self, edge_cost)
         
         
         def __eq__(self, other):
-            return self.info == other.info
-    
-    
-    class __Edge(object):
-        
-        
-        def __init__(self, node1, node2, cost = 0, directed = False):
             """
-            Creates an edge between two nodes (not necesarilly different)
-            :param node1: the node object contenting
-            :param node2: the node object to be added
-            :param cost: integer, the cost of the edge, 0 by default
-            :param directed: boolean saying if the edge has a direction
+            A node will be equals to another if their info have the same values,
+            also if the edges that end in the self node are equal to the ones
+            that end in the other node
             """
-            self.node1 = node1
-            self.node2 = node2
-            self.cost = cost
-            self.node1.add_neighbor(node2)
-            
-            if not directed:
-                self.node2.add_neighbor(node1)
+            return self.info == other.info \
+                    and set(self.in_edges) == set(other.in_edges)
