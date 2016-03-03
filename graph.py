@@ -45,6 +45,14 @@ class Graph(object):
     def nodes(self, ):
         return deepcopy(self.__nodes)
     
+    
+    def get_parents(self, node):
+        return node.parents
+    
+    
+    def get_neighbors(self, node):
+        return node.neighbors
+    
 
     class __Node:
         
@@ -57,7 +65,6 @@ class Graph(object):
             self.info = info
             self.__in_edges = set()
             self.__out_edges = set()
-            self.parent = None
             self.color = 'white'
             self.cost = 0
         
@@ -88,6 +95,11 @@ class Graph(object):
             return deepcopy(self.__out_edges)
         
         
+        @property
+        def parents(self, ):
+            return deepcopy(self.__in_edges)
+        
+        
         def __del__(self, ):
             
             
@@ -111,7 +123,7 @@ class Graph(object):
             """
             
             def __get_all_edges(node):
-                return node.__in_edges.union(node.__out_edges)
+                return deepcopy(node.__in_edges.union(node.__out_edges))
             
             
             return self.info == other.info \
