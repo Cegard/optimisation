@@ -38,7 +38,7 @@ class Graph(object):
         :returns: A list containing all the nodes with the given info 
         """
         
-        return [x for prospect_node in self.__nodes if prospect_node.info == node_info]
+        return set([x for prospect_node in self.__nodes if prospect_node.info == node_info])
     
     
     @property
@@ -63,8 +63,8 @@ class Graph(object):
             :param info: the value to be stored within  the node
             """
             self.info = info
-            self.__in_edges = set()
-            self.__out_edges = set()
+            self.__origin_nodes = dict()
+            self.__destiny_nodes = dict()
             self.color = 'white'
             self.cost = 0
         
@@ -72,8 +72,8 @@ class Graph(object):
         def add_neighbor(self, neighbor, edge_cost = 0, directed = False):
             """
             Adds a node as a neighbor by creating an edge between
-            the self node and the neighbor node; an edge is a
-            tuple of the form (neighbor, cost)
+            the self node and the neighbor node; an edge is a dictionary
+            key of the form (neighbor, cost)
             :param neighbor: A node object to be added.
             :param edge_cost: The cost of the edge to be created.
             :param directed: If directed it'll create only an edge coming from
@@ -81,8 +81,8 @@ class Graph(object):
             """
             
             def __set_neighbor_relationship(starting_node, ending_node, cost):
-                starting_node.__out_edges.add(ending_node, cost)
-                ending_node.__in_edges.add(starting_node, cost)
+                starting_node.__destiny_nodes[(ending_node.info, cost)] = ending_node
+                ending_node.__origin_nodes[(starting_node, cost)] = starting_node
             
             
             __set_neighbor_relationship(self, neighbor, edge_cost)
@@ -92,27 +92,32 @@ class Graph(object):
         
         @property
         def neighbors(self, ):
-            return deepcopy(self.__out_edges)
+            return deepcopy(self.__destiny_nodes.values())
         
         
         @property
         def parents(self, ):
-            return deepcopy(self.__in_edges)
+            return deepcopy(self.__origin_nodes.values())
         
         
         def __del__(self, ):
             
             
-            def __remove_edge(edges, edge):
-                edges -= edge
+            def __pop_nodes(nodes, side, info):
+                
+                for node in nodes:
+                    edges = [x for x in node.__dict__[side].keys() if x[0] == info]
+                    
+                    for edge in edges:
+                        node.__dict__[side].keys.pop(edge)
             
             
-            for edge in self.__in_edges.union(self.__out_edges):
-                secondary_node = in_edge[0]
-                cost = edge[1]
-                edge_to_remove = {(self, cost)}
-                __remove_edge(secondary_node.__out_edges, edge_to_remove)
-                __remove_edge(secondary_node.__in_edges, edge_to_remove)
+            origin_nodes = self.__origin_nodes.values()
+            destiny_nodes = self.__destiny_nodes.values()
+            far = '_Node__destiny_nodes'
+            near = '_Node__origin_nodes'
+            __pop_nodes(origin_nodes, far)
+            __pop_nodes(destiny_nodes, near)
         
         
         def __eq__(self, other):
@@ -123,8 +128,11 @@ class Graph(object):
             """
             
             def __get_all_edges(node):
-                return deepcopy(node.__in_edges.union(node.__out_edges))
+                origins_set = set(node.__origin_nodes.keys())
+                destinys_set = set(node.__destiny_nodes.keys())
+                return deepcopy(origins_set.union(destinys_nodes))
             
             
-            return self.info == other.info \
+            are_equals = self.info == other.info \
                     and __get_all_edges(self) == __get_all_edges(other)
+            return are_equals

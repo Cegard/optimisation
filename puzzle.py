@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from copy import deepcopy
 from math import floor, log10
+from helpers import list_add
 
 
 class Puzzle:
@@ -24,9 +25,10 @@ class Puzzle:
         self.__length = length
         self.__possibilities = (True, False, True, False) # up, down, left, right
         self.__blank_box = (length-1, length-1)
-        self.__board = [[i*length+j+1 for j in range(length)] for i in range(length)]
+        self.__sorted = []
+        self.__board = [list_add(self.__sorted, [i*length+j+1 for j in range(length)])
+                for i in range(length)]
         self.__board[length-1][length-1] = None
-        self.__sorted = deepcopy(self.__board)
         self.__previous_move = ''
         
     
