@@ -13,12 +13,13 @@ class Graph(object):
         self.__nodes = []
     
     
-    def add_node(self, content):
+    def add_isolated_node(self, content):
         """
         Creates a new node with the given content and adds it
         to the graph.
         :param content: the info to be stroed within the node
         """
+        node = __Node(content)
         self.__nodes.append(self.__Node(content))
     
     
