@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from puzzle import Puzzle
 from idfs import iterated_dfs as i_dfs
-import helpers, time
+from a_star import a_star_h1
+import helpers
 
 puzzle_length = 4
 number_of_puzzles = 30
@@ -13,9 +14,9 @@ for key in puzzles:
     
     for i in range(number_of_puzzles):
         puzzles[key].append(helpers.disorder_puzzle(key, puzzle))
-tic = time.time()
-i_dfs(helpers.disorder_puzzle(25, puzzle))
-print(str(time.time()-tic))
+node = helpers.disorder_puzzle(10,puzzle)
+print(a_star_h1(helpers.deepcopy(node)))
+print(i_dfs(helpers.deepcopy(node)))
 '''
 # assigns the same disorded puzzles to the lists to be ran for the respective algorithm
 idfs_puzzles = helpers.deepcopy(puzzles)

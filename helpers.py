@@ -67,7 +67,7 @@ def check_opposites(previous_move, next_move):
     return previous_move == directions[opposites[next_move]]
 
 
-def find_min_by_pos(index, *lst):
+def find_min_by_pos(index, lst):
     """
     Finds the object of all in the given list, checking only at the given index
     :param index: the index in where to look to find the min
@@ -78,18 +78,30 @@ def find_min_by_pos(index, *lst):
     
     for tpl in lst:
         
-        if tpl[index] < min_of_all[index]: min_of_all = tpl
+        if tpl[index] <= min_of_all[index]: min_of_all = tpl
     
     return min_of_all
 
 
 def is_in(member, lsts, index):
-    is_in_the_list = False
     lst_length = len(lsts)
-    actual_index = -1
+    actual_index = 0
+    found_index = -1
     
-    while(not is_in_the_list and actual_index < lst_length):
+    while((actual_index < lst_length) and (lsts != [])):
+        was_found = lsts[actual_index][index] == member
+        
+        if was_found:
+            found_index = actual_index
+            actual_index = lst_length
+        
         actual_index += 1
-        is_in_the_list = lsts[actual_index][index] == member
     
-    return actual_index
+    return found_index
+
+
+def calc_manhattan(puzzle):
+    xs = 0
+    ys = 0
+    rows = cols = puzzle.length
+    

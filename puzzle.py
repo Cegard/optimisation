@@ -119,7 +119,7 @@ class Puzzle:
         for row in range(self.__length):
             
             for col in range(self.__length):
-                misplaced = self.__board == self.__sorted
+                misplaced = self.__board[row][col] != self.__sorted[row][col]
                 misplaceds += int(misplaced)
         
         return misplaceds

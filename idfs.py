@@ -9,7 +9,6 @@ def iterated_dfs(puzzle):
     
     while not reached:
         bottom += 1
-        print(bottom)
         level = 1
         nodes_stack = [(deepcopy(puzzle), level, '')]
         
