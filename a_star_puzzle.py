@@ -14,37 +14,25 @@ for key in puzzles:
     
     for i in range(number_of_puzzles):
         puzzles[key].append(helpers.disorder_puzzle(key, puzzle))
-node = helpers.disorder_puzzle(10,puzzle)
-print(a_star_h1(helpers.deepcopy(node)))
-print(i_dfs(helpers.deepcopy(node)))
-'''
+
+
 # assigns the same disorded puzzles to the lists to be ran for the respective algorithm
 idfs_puzzles = helpers.deepcopy(puzzles)
 h1_puzzles = helpers.deepcopy(puzzles)
 h2_puzzles = helpers.deepcopy(puzzles)
 
 # gets the results
-# as the IDFS algorithm is too slow, it won't calculate for 25 moves puzzles
-idfs_puzzles.pop(25)
+idfs_puzzles.pop(25) # since IDFS algorithm is too slow, it won't calculate for 25 moves puzzles
 idfs_results = helpers.run_algorithm(idfs_puzzles, i_dfs)
-h1_results = []
-h2_results = []
+h1_results = helpers.run_algorithm(h1_puzzles, a_star_h1, 1)
+h2_results = helpers.run_algorithm(h1_puzzles, a_star_h1, 2)
 
 #computes results
-idfs_means = dict()
-idfs_medians = dict()
-idfs_std_devs_mean = dict()
-idfs_std_devs_median = dict()
+idfs_computes = helpers.computes_results(idfs_results)
+h1_computes = helpers.computes_results(h1_results)
+h2_computes = helpers.computes_results(h2_results)
 
-for key in idfs_results:
-    
-    idfs_means[key] = helpers.mean(idfs_results[key])
-    idfs_medians[key] = helpers.median(idfs_results[key])
-    idfs_std_devs_mean[key] = helpers.stdev(idfs_results[key], idfs_means[key])
-    idfs_std_devs_median[key] = helpers.stdev(idfs_results[key], idfs_medians[key])
-
-print(' mean :' + str(idfs_means[10]) +
-      '\n median:' + str(idfs_medians[10]) +
-      '\n std dev mean:' + str(idfs_std_devs_mean[10]) +
-      '\n std dev median:' + str(idfs_std_devs_median[10]))
-'''
+# shows results
+helpers.print_results(idfs_computes, 'iterated-dfs')
+helpers.print_results(h1_computes, 'A* h1')
+helpers.print_results(h2_computes, 'A* h2')

@@ -49,14 +49,14 @@ def disorder_puzzle(movements, puzzle):
     return copied_puzzle
 
 
-def run_algorithm(puzzles, algorithm):
+def run_algorithm(puzzles, algorithm, heuristic = None):
     results = dict()
     
     for random_movements in puzzles:
         expanded_nodes = []
         
         for puzzle in puzzles[random_movements]:
-            expanded_nodes.append(algorithm(puzzle))
+            expanded_nodes.append(algorithm(puzzle) if not heuristic else algorithm(puzzle, heuristic))
             results[random_movements] = expanded_nodes
     
     return results
@@ -101,7 +101,39 @@ def is_in(member, lsts, index):
 
 
 def calc_manhattan(puzzle):
-    xs = 0
-    ys = 0
-    rows = cols = puzzle.length
+    total = 0
     
+    for row in range(puzzle.length):
+        
+        for col in range(puzzle.length):
+            tile = puzzle.board[row][col]
+            
+            if tile != None: 
+                tile -= 1
+                total += abs(row - tile//puzzle.length)
+                total += abs(col - tile%puzzle.length)
+    
+    return total
+
+def computes_results(results):
+    computes = dict()
+    
+    for moves in results:
+        computes[moves] = dict()
+        computes[moves]['mean'] = mean(results[moves])
+        computes[moves]['median'] = median(results[moves])
+        computes[moves]['mean_stdev'] = stdev(results[moves], computes[moves]['mean'])
+        computes[moves]['median_stdev'] = stdev(results[moves], computes[moves]['median'])
+    
+    return computes
+
+
+def print_results(results, algorithm):
+    message = '-'*20 +'\nresults of '+algorithm+': \n'
+    print(message)
+    
+    for moves in results:
+        
+        for value in moves:
+            sub_message = value + ': ' + results[moves][value]
+            print(sub_message)
