@@ -92,4 +92,4 @@ def is_in(member, lsts, index):
         actual_index += 1
         is_in_the_list = lsts[actual_index][index] == member
     
-    return (is_in_the_list, actual_index)
+    return actual_index
