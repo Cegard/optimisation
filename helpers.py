@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+from statistics import mean, median, stdev
 from copy import deepcopy
 from random import randint as rand
+
+directions = {0: 'up', 1: 'down', 2: 'left', 3: 'right'}
+opposites = {'up': 1, 'down': 0, 'left': 3, 'right': 2}
 
 
 def list_add(lst, item):
@@ -23,14 +27,13 @@ def disorder_puzzle(movements, puzzle):
     :param puzzle: The puzzle to disorder
     :returns: a copy of the given puzzle idsordered
     """
-    directions = {0: 'up', 1: 'down', 2: 'left', 3: 'right'}
-    opposites = {0: 1, 1: 0, 2: 3, 3: 2}
+    global directions, opposites
     copied_puzzle = deepcopy(puzzle)
     
     
     def get_availability(key):
         return copied_puzzle.possibilities[key] \
-                and copied_puzzle.previous_move != directions[opposites[key]]
+                and not check_opposites(copied_puzzle.previous_move, directions[key])
     
     
     for i in range(movements):
@@ -57,3 +60,36 @@ def run_algorithm(puzzles, algorithm):
             results[random_movements] = expanded_nodes
     
     return results
+
+
+def check_opposites(previous_move, next_move):
+    global directions, opposites
+    return previous_move == directions[opposites[next_move]]
+
+
+def find_min_by_pos(index, *lst):
+    """
+    Finds the object of all in the given list, checking only at the given index
+    :param index: the index in where to look to find the min
+    :param *lst: collection of objects
+    :returns: a *lst member
+    """
+    min_of_all = {index: float('inf')}
+    
+    for tpl in lst:
+        
+        if tpl[index] < min_of_all[index]: min_of_all = tpl
+    
+    return min_of_all
+
+
+def is_in(member, lsts, index):
+    is_in_the_list = False
+    lst_length = len(lsts)
+    actual_index = -1
+    
+    while(not is_in_the_list and actual_index < lst_length):
+        actual_index += 1
+        is_in_the_list = lsts[actual_index][index] == member
+    
+    return (is_in_the_list, actual_index)

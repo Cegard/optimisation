@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from copy import deepcopy
 from math import floor, log10
-from helpers import list_add
+from helpers import list_add, deepcopy
 
 
 class Puzzle:
@@ -112,6 +111,20 @@ class Puzzle:
     def board(self, ):
         return deepcopy(self.__board)
     
+    
+    @property
+    def misplaceds(self, ):
+        misplaceds = 0
+        
+        for row in range(self.__length):
+            
+            for col in range(self.__length):
+                misplaced = self.__board == self.__sorted
+                misplaceds += int(misplaced)
+        
+        return misplaceds
+    
+    
     @property
     def possible_moves(self):
         directions = ['up', 'down', 'left', 'right']
@@ -123,3 +136,8 @@ class Puzzle:
                 moves.append(directions[pos_index])
         
         return moves
+    
+    
+    def __eq__(self, other):
+        return self.__board == other.__board
+    
