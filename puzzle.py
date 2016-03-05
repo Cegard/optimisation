@@ -25,15 +25,15 @@ class Puzzle:
         self.__length = length
         self.__possibilities = (True, False, True, False) # up, down, left, right
         self.__blank_box = (length-1, length-1)
-        self.__sorted = []
-        self.__board = [list_add(self.__sorted, [i*length+j+1 for j in range(length)])
+        self.__board = [[i*length+j+1 for j in range(length)]
                 for i in range(length)]
         self.__board[length-1][length-1] = None
+        self.__sorted = deepcopy(self.__board)
         self.__previous_move = ''
         
     
     
-    def is_ordered(self, ):
+    def is_sorted(self, ):
         return self.__board == self.__sorted
     
     
@@ -111,3 +111,15 @@ class Puzzle:
     @property
     def board(self, ):
         return deepcopy(self.__board)
+    
+    @property
+    def possible_moves(self):
+        directions = ['up', 'down', 'left', 'right']
+        moves = []
+        
+        for pos_index in range(4):
+            
+            if self.__possibilities[pos_index]:
+                moves.append(directions[pos_index])
+        
+        return moves

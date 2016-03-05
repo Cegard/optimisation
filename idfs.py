@@ -3,19 +3,26 @@ from copy import deepcopy
 
 
 def iterated_dfs(puzzle):
-    reached = puzzle.is_ordered()
+    reached = puzzle.is_sorted()
     bottom = 0
-    directions = {0: 'up', 1: 'down', 2: 'left', 3: 'right'}
+    expanded_nodes = 0
     
     while not reached:
         bottom += 1
-        level = 0
-        nodes_stack = [deepcopy(puzzle)]
-        
-        while not reached and nodes_stack != []:
-            level += 1
-            last_visited = nodes_stack.pop()
-            reached = last_visited.is_ordered()
+        level = 1
+        nodes_stack = [(deepcopy(puzzle), level)]
+        print(bottom)
+        while nodes_stack != [] and not reached:
+            last_one = nodes_stack.pop()
+            node, node_level = last_one[0], last_one[1]
+            reached = node.is_sorted()
             
-            if not reached and level < bottom:
-                nodes_stack += [last_visited.swap(d) for d in range(4) if last_visited.possibilities[directions[d]]]
+            if not reached and node_level < bottom:
+                expanded_nodes += 1
+                
+                for move in node.possible_moves:
+                    node_to_add = deepcopy(node)
+                    node_to_add.swap(move)
+                    nodes_stack.append((node_to_add, node_level+1))
+        
+    return expanded_nodes
