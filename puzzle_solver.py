@@ -28,7 +28,7 @@ idfs_results = helpers.run_algorithm(idfs_puzzles, algorithm = i_dfs)
 h1_results = helpers.run_algorithm(h1_puzzles, heuristics, 'h1', algorithm = a_star)
 h2_results = helpers.run_algorithm(h1_puzzles, heuristics, 'h2', algorithm = a_star)
 
-#computes results
+#compute results
 idfs_computes = helpers.computes_results(idfs_results)
 h1_computes = helpers.computes_results(h1_results)
 h2_computes = helpers.computes_results(h2_results)

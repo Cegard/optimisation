@@ -130,14 +130,16 @@ def computes_results(results):
 
 
 def print_results(results, algorithm):
-    message = '-'*20 +'\nresults of '+algorithm+': \n'
+    message = '\n'+'-'*20 +'\nresults of '+algorithm+':'
     print(message)
     
     for moves in results:
+        print('\n   ',moves)
         
         for value in results[moves]:
             sub_message = value + ': ' + str(results[moves][value])
-            print(sub_message)
+            print('   ', sub_message)
+
 
 
 def count_misplaceds(puzzle):

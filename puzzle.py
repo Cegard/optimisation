@@ -29,7 +29,15 @@ class Puzzle:
         self.__board[length-1][length-1] = None
         self.__sorted = deepcopy(self.__board)
         self.__previous_move = ''
-        
+    
+    
+    def __get_box(self, position):
+        """
+        Gets the item at the exact coordinate in the board
+        :param position: An integer representation of the position.
+        :returns: The item at the coordinate ((position/length), (position%length))
+        """
+        return self.__board[position//self.__length][position%self.__length]
     
     
     def is_sorted(self, ):
@@ -57,34 +65,6 @@ class Puzzle:
     def __set_possibilities(self, ):
         self.__possibilities = ((self.__blank_box[0] > 0), (self.__blank_box[0] < self.__length-1),
             (self.__blank_box[1] > 0), (self.__blank_box[1] < self.__length-1))
-    
-    
-    def __get_box(self, position):
-        """
-        Gets the item at the exact coordinate in the board
-        :param position: An integer representation of the position.
-        :returns: The item at the coordinate ((position/length), (position%length))
-        """
-        return self.__board[position//self.__length][position%self.__length]
-    
-    
-    def __eq__(self, other):
-        return self.__board == other.board
-    
-    
-    def __str__(self, ):
-        puzzle = ''
-        max_digits = floor(log10(self.__length**2))+1
-        last_col = self.__length-1
-        
-        for i in range(self.__length**2):
-            digits = floor(log10(self.__get_box(i) or 1)+1)
-            actual_col = i%self.__length
-            puzzle += ' ' + ' ' * (max_digits-digits) \
-                    + str(self.__get_box(i) or 'X') \
-                    + ('\n' if actual_col == last_col else '') 
-        
-        return puzzle
     
     
     @property
@@ -141,3 +121,21 @@ class Puzzle:
     def __eq__(self, other):
         return self.__board == other.__board
     
+    
+    def __eq__(self, other):
+        return self.__board == other.board
+    
+    
+    def __str__(self, ):
+        puzzle = ''
+        max_digits = floor(log10(self.__length**2))+1
+        last_col = self.__length-1
+        
+        for i in range(self.__length**2):
+            digits = floor(log10(self.__get_box(i) or 1)+1)
+            actual_col = i%self.__length
+            puzzle += ' ' + ' ' * (max_digits-digits) \
+                    + str(self.__get_box(i) or 'X') \
+                    + ('\n' if actual_col == last_col else '') 
+        
+        return puzzle
