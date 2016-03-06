@@ -2,7 +2,8 @@
 from helpers import deepcopy, check_opposites
 
 
-def iterated_dfs(puzzle):
+def iterated_dfs(*args):
+    puzzle = args[0]
     reached = puzzle.is_sorted()
     bottom = 0
     expanded_nodes = 0

@@ -49,14 +49,15 @@ def disorder_puzzle(movements, puzzle):
     return copied_puzzle
 
 
-def run_algorithm(puzzles, algorithm, heuristic = None):
+def run_algorithm(*args, algorithm):
     results = dict()
+    puzzles = args[0]
     
     for random_movements in puzzles:
         expanded_nodes = []
         
         for puzzle in puzzles[random_movements]:
-            expanded_nodes.append(algorithm(puzzle) if not heuristic else algorithm(puzzle, heuristic))
+            expanded_nodes.append(algorithm(puzzle, *args[1:]))# if not heuristic else algorithm(puzzle, heuristic))
             results[random_movements] = expanded_nodes
     
     return results
@@ -134,6 +135,10 @@ def print_results(results, algorithm):
     
     for moves in results:
         
-        for value in moves:
-            sub_message = value + ': ' + results[moves][value]
+        for value in results[moves]:
+            sub_message = value + ': ' + str(results[moves][value])
             print(sub_message)
+
+
+def count_misplaceds(puzzle):
+    return puzzle.misplaceds

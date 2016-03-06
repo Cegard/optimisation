@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-from helpers import deepcopy, find_min_by_pos, check_opposites, is_in, calc_manhattan
+from helpers import deepcopy, find_min_by_pos, check_opposites, is_in
 
-def a_star_h1(puzzle, heuristic):
+def a_star(*args):
+    puzzle = args[0]
+    heuristics = args[1]
+    heuristic = args[2]
     copied_puzzle = deepcopy(puzzle)
     open_list = [[copied_puzzle, 0, 0, 0, None, '']] # state, F, G, H, parent, last move
     closed_list = []
@@ -31,7 +34,7 @@ def a_star_h1(puzzle, heuristic):
                     
                     if closed_index == -1:
                         g = actual_g_cost+1
-                        h = node_to_add.misplaceds if heuristic == 1 else calc_manhattan(node_to_add)
+                        h = heuristics[heuristic](node_to_add)
                         f = g+h
                         open_index = is_in(node_to_add, open_list, index_to_is_in)
                         
