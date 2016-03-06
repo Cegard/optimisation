@@ -34,7 +34,6 @@ h1_computes = helpers.computes_results(h1_results)
 h2_computes = helpers.computes_results(h2_results)
 
 # shows results
-print (idfs_computes)
 helpers.print_results(idfs_computes, 'iterated-dfs')
 helpers.print_results(h1_computes, 'A* h1')
 helpers.print_results(h2_computes, 'A* h2')
