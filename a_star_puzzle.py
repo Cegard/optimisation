@@ -7,7 +7,7 @@ import helpers
 puzzle_length = 4
 number_of_puzzles = 30
 puzzle = Puzzle(puzzle_length)
-puzzles = {5: [], 15: [], 20: [], 25: []}
+puzzles = {10: [], 15: [], 20: [], 25: []}
 
 #disorders the puzzle
 for key in puzzles:
