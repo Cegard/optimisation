@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
-from helpers import deepcopy, find_min_by_pos, check_opposites, is_in
+#from helpers import deepcopy, find_min_by_pos, check_opposites, is_in
 
 def a_star(*args):
+    ## delete ##
     puzzle = args[0]
     heuristics = args[1]
     heuristic = args[2]
     copied_puzzle = deepcopy(puzzle)
+    ############
     open_list = [[copied_puzzle, 0, 0, 0, None, '']] # state, F, G, H, parent, last move
     closed_list = []
     reached = copied_puzzle.is_sorted()
     expanded_nodes = 0
     
-    while (not reached and open_list != []):
+    while not reached and open_list is not []:
         index_to_find_min = 1
         last_node = find_min_by_pos(index_to_find_min, open_list)
         open_list.remove(last_node)
@@ -49,5 +51,5 @@ def a_star(*args):
                                 open_list[open_index][3] = h
                                 open_list[open_index][4] = node
                                 open_list[open_index][5] = move
-        
+    
     return expanded_nodes
