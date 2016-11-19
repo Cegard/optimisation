@@ -23,10 +23,11 @@ estimations.append(node_d)
 estimations.append(node_e)
 estimations_per_node = dict(zip(nodes_names, estimations))
 
+
 def get_time(node, task):
 	return estimations_per_node[node]._asdict()[task]
 
 
 def get_estimation(excluded_node, excluded_task):
-	return min(get_time(node, task) for node in set(nodes_names)-{excluded_node}
-			   for task in set(tasks_names)-{excluded_task})
+	return 0 #min(get_time(node, task) for node in set(nodes_names) - {excluded_node}
+			   #for task in set(tasks_names) - {excluded_task})

@@ -30,6 +30,7 @@ def a_star():
     bottom = len(tasks_names)
     names = set(nodes_names)
     tasks = set(tasks_names)
+    nodes = 0
     
     while not reached:
         q_node = min(open_list, key = lambda a_node: a_node.f_value)
@@ -39,6 +40,7 @@ def a_star():
         is_the_bottom = q_node.depth == bottom
         
         if not is_the_bottom:
+            nodes += 1
             
             for previous_node in get_track(q_node):
                 excluded_names.add(previous_node.name)
@@ -49,10 +51,10 @@ def a_star():
                           for available_task in tasks - excluded_tasks)
             
             for successor in successors:
-                arguments = {'name' : successor.name,
-                             'task' : successor.task,
-                             'f_value' : successor.f_value,
-                             'depth' : successor.depth}
+                arguments = {'name': successor.name,
+                             'task': successor.task,
+                             'f_value': successor.f_value,
+                             'depth': successor.depth}
                 
                 search_function = define_search_node(**arguments)
                 
@@ -66,4 +68,5 @@ def a_star():
         
         reached = goal is not None or open_list == []
     
+    print(nodes)
     return get_track(goal)
