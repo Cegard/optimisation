@@ -13,7 +13,7 @@ class Node:
 		self.__parent = parent
 		self.__g_value = get_time(node = name, task = task) + \
 						 parent.__g_value if parent else 0
-		self.__h_value = Node.__estimate(name, task)
+		self.__h_value = Node.__estimate(name, task) if name else 0
 		self.__f_value = self.__h_value + self.__g_value
 		self.__depth = self.__parent.depth + 1 if parent else 0
 	
